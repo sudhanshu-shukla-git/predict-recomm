@@ -12,7 +12,7 @@ warnings.filterwarnings("ignore")
 class mf_performance():
 
     def __init__(self):
-        self.mf_df=pd.read_pickle("mf_data_popular.pkl.bz2",compression="bz2")
+        self.mf_df=pd.read_pickle("PredictPlus\predict-plus-recommend\mf_data_popular.pkl.bz2",compression="bz2")
         self.mf = Mftool()
         self.top_equity=None
         self.top_debt=None
@@ -21,7 +21,7 @@ class mf_performance():
         self.top_other=None
         self.mf_perform_data=None
         self.top_all=None
-
+    
     def flatten(self,t):
         return [item for sublist in t for item in sublist]
     
@@ -49,7 +49,8 @@ class mf_performance():
     
     def performance_based_recommendation(self,mf_category=None,mf_sub_category=None,risk=None,top_n=5,load_cache=True):
         try:
-            return self.get_response(self.mutual_fund_performance(mf_category,mf_sub_category,risk,top_n,load_cache))
+            result=self.mutual_fund_performance(mf_category,mf_sub_category,risk,top_n,load_cache)
+            return self.get_response(result)
         except Exception as ex:
             return self.get_exception_response("Error occured, please try again. Exception-"+ex)                        
     
@@ -62,7 +63,7 @@ class mf_performance():
         else:
             return str(mf_risk_score)
 
-    def mutual_fund_performance(self,mf_category=None,mf_sub_category=None,top_n=5,load_cache=True):
+    def mutual_fund_performance(self,mf_category=None,mf_sub_category=None,risk=None,top_n=5,load_cache=True):
             result=None
             if mf_category=="Equity Scheme":
                 top_funds=self.get_equity_performance_based_funds(mf_sub_category,load_cache)
